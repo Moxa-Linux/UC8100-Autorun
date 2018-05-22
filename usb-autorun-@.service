@@ -1,0 +1,9 @@
+[Unit]
+Description=USB Autorun
+
+[Service]
+Type=oneshot
+RemainAfterExit=false
+ExecStart=/bin/bash -c "/usr/bin/logger -t usb-autorun-%I ===Start=== && /bin/bash /media/%I/autorun.sh 2>&1 | logger -t usb-autorun-%I"
+ExecStop=/bin/bash -c "/usr/bin/logger -t usb-autorun-%I ===End==="
+

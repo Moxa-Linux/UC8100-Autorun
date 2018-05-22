@@ -1,0 +1,11 @@
+KERNEL!="sd[a-z]*", GOTO="autorun_end"
+ENV{DEVTYPE}!="partition", GOTO="autorun_end"
+
+ACTION=="add", PROGRAM!="/sbin/blkid %N", GOTO="autorun_end"
+ACTION=="add", IMPORT{program}="/sbin/blkid -o udev -p -s TYPE -s LABEL %N"
+ACTION=="add", ENV{ID_FS_LABEL}=="?*", PROGRAM="/usr/bin/basename '%E{ID_FS_LABEL}'", ENV{dir_name}="%c"
+ACTION=="add", ENV{dir_name}=="", ENV{dir_name}="usb-%k"
+ACTION=="add", ENV{dir_name}!="", ENV{SYSTEMD_WANTS}+="usb-autorun-@%E{dir_name}.service"
+
+LABEL="autorun_end"
+
